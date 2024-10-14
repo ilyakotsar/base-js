@@ -94,7 +94,7 @@ function post(element, url, query) {
     });
 }
 
-function show(target, element=undefined, iconA='', iconB='', iconLocation='i') {
+function toggle(target, element=undefined, iconA='', iconB='') {
     let targetElement = document.querySelector(target);
     let icon = '';
     if (targetElement.classList.contains(displayNoneClass)) {
@@ -114,16 +114,6 @@ function show(target, element=undefined, iconA='', iconB='', iconLocation='i') {
                 iconElement = element;
                 break;
         }
-        switch (iconLocation) {
-            case 'i':
-                iconElement.innerHTML = document.querySelector(icon).innerHTML;
-                break;
-            case 'o':
-                iconElement.innerHTML = document.querySelector(icon).outerHTML;
-        }
+        iconElement.innerHTML = document.querySelector(icon).innerHTML;
     }
-}
-
-function hide(target) {
-    document.querySelector(target).classList.add(displayNoneClass);
 }
