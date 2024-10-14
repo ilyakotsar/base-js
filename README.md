@@ -6,8 +6,8 @@ Basic functions for HTML. Simple and more flexible alternative to htmx.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@1.0.0/base.js"
-  integrity=""
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.0/base.js"
+  integrity="sha384-tLVBab9JgUhV5THqRcVu2tnJ4TnOj1jDT6tLYil/OzubR3TbOR7GcozBOANUMUHo"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 ></script>
@@ -22,30 +22,30 @@ get(url, query);
 post(element, url, query);
 ```
 
-==url== - URL string
+url - URL string
 
-==query== - query string with three arguments in the format 'response_key|selector|operation_letter',
+query - query string with three arguments in the format 'response_key|selector|operation_letter',
 multiple queries are separated by semicolons
 
-==element== - this or a string with a selector
+element - this or a string with a selector
 
 Use name as a selector with n=name
 
 Operation letters:
 
-==i== - innerHTML
+i - innerHTML
 
-==o== - outerHTML
+o - outerHTML
 
-==v== - value
+v - value
 
-==c== - className
+c - className
 
-==ac== - classList.add()
+ac - classList.add()
 
-==rc== - classList.remove()
+rc - classList.remove()
 
-==tc== - classList.toggle()
+tc - classList.toggle()
 
 Example:
 
@@ -95,6 +95,6 @@ Example:
 You can change the variables to your own.
 
 ```js
-csrfTokenName = 'mycsrftoken';
-displayNoneClass = 'd-none';
+csrfTokenName = 'mycsrftoken'; // Default: csrfmiddlewaretoken
+displayNoneClass = 'd-none'; // Default: hidden
 ```
