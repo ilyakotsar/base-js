@@ -25,8 +25,11 @@ function applyQuery(query, response) {
     let queryArray = query.split(';');
     for (let i = 0; i < queryArray.length; i++) {
         let params = queryArray[i].trim().split('|');
-        let key = params[0];
-        let value = response[key];
+        let key = params[0].split('.');
+        let value = response;
+        for (let i = 0; i < key.length; i++) {
+            value = value[key[i]];
+        }
         let selector = params[1];
         let operation = params[2];
         let elements = [];

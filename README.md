@@ -1,16 +1,17 @@
 # base-js
 
-Basic functions for HTML. Simple and more flexible alternative to htmx.
+Basic functions for HTML.
 
 ## Connection
 
 ```html
-<script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.0/base.js"
-  integrity="sha384-tLVBab9JgUhV5THqRcVu2tnJ4TnOj1jDT6tLYil/OzubR3TbOR7GcozBOANUMUHo"
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
+<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.1/base.js"></script>
+```
+
+Minified:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.1/base.min.js"></script>
 ```
 
 ## Requests
@@ -22,30 +23,21 @@ get(url, query);
 post(element, url, query);
 ```
 
-url - URL string
+**url** - URL string.\
+**query** - Query string with three arguments in the format 'response_key|selector|operation'.
+Nested keys are separated by dots. Multiple queries are separated by semicolons.
+Use name as a selector with n=name.\
+**element** - Selector string or *this*\
 
-query - query string with three arguments in the format 'response_key|selector|operation_letter',
-multiple queries are separated by semicolons
+Operations:
 
-element - this or a string with a selector
-
-Use name as a selector with n=name
-
-Operation letters:
-
-i - innerHTML
-
-o - outerHTML
-
-v - value
-
-c - className
-
-ac - classList.add()
-
-rc - classList.remove()
-
-tc - classList.toggle()
+**i** - innerHTML\
+**o** - outerHTML\
+**v** - value\
+**c** - className\
+**ac** - classList.add()\
+**rc** - classList.remove()\
+**tc** - classList.toggle()\
 
 Example:
 
@@ -62,6 +54,17 @@ Example:
 ```html
 <button
   type="button"
+  onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#eur|i')"
+>
+  Get rate
+</button>
+<div>USD: 1</div>
+<div>EUR: <span id="eur"></span></div>
+```
+
+```html
+<button
+  type="button"
   name="theme-btn"
   onclick="post(this, '/switch-theme', 'theme|html|c; button|n=theme-btn|o')"
 >
@@ -70,7 +73,7 @@ Example:
 </button>
 ```
 
-## Display toggle
+## Display
 
 ```js
 toggle(target, element=undefined, iconA='', iconB='');
