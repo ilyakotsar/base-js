@@ -27,7 +27,7 @@ post(element, url, query);
 **query** - Query string with three arguments in the format 'response_key|selector|operation'.
 Nested keys are separated by dots. Multiple queries are separated by semicolons.
 Use name as a selector with n=name.\
-**element** - Selector string or *this*\
+**element** - Selector string or *this*
 
 Operations:
 
@@ -37,9 +37,9 @@ Operations:
 **c** - className\
 **ac** - classList.add()\
 **rc** - classList.remove()\
-**tc** - classList.toggle()\
+**tc** - classList.toggle()
 
-Example:
+Examples:
 
 ```html
 <button
