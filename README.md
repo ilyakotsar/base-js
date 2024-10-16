@@ -5,29 +5,28 @@ Basic functions for HTML.
 ## Connection
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.1/base.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.2/base.js"></script>
 ```
 
 Minified:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.1/base.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.2/base.min.js"></script>
 ```
 
 ## Requests
 
-All requests are executed via the Fetch API and should receive a response in JSON.
+All requests are made via the Fetch API and should receive a response in JSON format.
 
 ```js
-get(url, query);
-post(element, url, query);
+get(url, effect);
+post(element, url, effect);
 ```
 
-**url** - URL string.\
-**query** - Query string with three arguments in the format 'response_key|selector|operation'.
-Nested keys are separated by dots. Multiple queries are separated by semicolons.
-Use name as a selector with n=name.\
-**element** - Selector string or *this*
+**effect** - string with three arguments in the format 'response_key|selector|operation',
+nested keys are separated by dots, multiple effects are separated by semicolons,
+use name as a selector after *n=*\
+**element** - always equals *this*
 
 Operations:
 
@@ -76,26 +75,47 @@ Examples:
 ## Display
 
 ```js
-toggle(target, element=undefined, iconA='', iconB='');
+toggle(selector, element=undefined, iconA='', iconB='');
+select(tabId, tabClass, btnElement=undefined, btnSelectedClass='');
 ```
 
-Example:
+Examples:
 
 ```html
 <button
   type="button"
   onclick="toggle('#menu', this, '#menu-icon', '#close-icon')"
 >
-  Icon
+  menu-icon
 </button>
 <div id="menu" class="hidden"></div>
 <div id="menu-icon" class="hidden">menu-icon</div>
 <div id="close-icon" class="hidden">close-icon</div>
 ```
 
+```html
+<button
+  type="button"
+  name="tab-btns"
+  class="underline"
+  onclick="select('tab-1', 'tabs', this, 'underline')"
+>
+  Tab 1
+</button>
+<button
+  type="button"
+  name="tab-btns"
+  onclick="select('tab-2', 'tabs', this, 'underline')"
+>
+  Tab 2
+</button>
+<div id="tab-1" class="tabs">Tab 1</div>
+<div id="tab-2" class="tabs hidden">Tab 2</div>
+```
+
 ## Customization
 
-You can change the variables to your own.
+You can change the variables as you wish.
 
 ```js
 csrfTokenName = 'mycsrftoken'; // Default: csrfmiddlewaretoken

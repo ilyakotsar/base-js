@@ -1,7 +1,7 @@
 let csrfTokenName = 'csrfmiddlewaretoken';
 let displayNoneClass = 'hidden';
 
-async function request(method, url, data={}) {
+async function makeRequestFetchAPI(method, url, data={}) {
     let options = {
         method: method,
         credentials: 'same-origin',
@@ -21,18 +21,18 @@ async function request(method, url, data={}) {
     return response.json();
 }
 
-function applyQuery(query, response) {
-    let queryArray = query.split(';');
-    for (let i = 0; i < queryArray.length; i++) {
-        let params = queryArray[i].trim().split('|');
-        let key = params[0].split('.');
+function applyEffectAfterRequest(effect, response) {
+    let effectArray = effect.split(';');
+    for (let i = 0; i < effectArray.length; i++) {
+        let parameters = effectArray[i].trim().split('|');
+        let key = parameters[0].split('.');
         let value = response;
         for (let i = 0; i < key.length; i++) {
             value = value[key[i]];
         }
-        let selector = params[1];
-        let operation = params[2];
-        let elements = [];
+        let selector = parameters[1];
+        let operation = parameters[2];
+        let elements;
         if (selector.includes('n=')) {
             let name = selector.split('n=')[1];
             elements = document.querySelectorAll(`[name="${name}"]`);
@@ -68,22 +68,14 @@ function applyQuery(query, response) {
     }
 }
 
-function get(url, query) {
-    request('GET', url).then(response => {
-        applyQuery(query, response);
+function get(url, effect) {
+    makeRequestFetchAPI('GET', url).then(response => {
+        applyEffectAfterRequest(effect, response);
     });
 }
 
-function post(element, url, query) {
-    let children;
-    switch (typeof element) {
-        case 'string':
-            children = document.querySelector(element).children;
-            break;
-        case 'object':
-            children = element.children;
-            break;
-    }
+function post(element, url, effect) {
+    let children = element.children;
     let data = {};
     for (let i = 0; i < children.length; i++) {
         let name = children[i].name;
@@ -92,14 +84,14 @@ function post(element, url, query) {
             data[name] = value;
         }
     }
-    request('POST', url, data).then(response => {
-        applyQuery(query, response);
+    makeRequestFetchAPI('POST', url, data).then(response => {
+        applyEffectAfterRequest(effect, response);
     });
 }
 
-function toggle(target, element=undefined, iconA='', iconB='') {
-    let targetElement = document.querySelector(target);
-    let icon = '';
+function toggle(selector, element=undefined, iconA='', iconB='') {
+    let targetElement = document.querySelector(selector);
+    let icon;
     if (targetElement.classList.contains(displayNoneClass)) {
         targetElement.classList.remove(displayNoneClass);
         icon = iconB;
@@ -119,4 +111,18 @@ function toggle(target, element=undefined, iconA='', iconB='') {
         }
         iconElement.innerHTML = document.querySelector(icon).innerHTML;
     }
+}
+
+function select(tabId, tabClass, btnElement=undefined, btnSelectedClass='') {
+    let tabs = document.querySelectorAll(`.${tabClass}`);
+    for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.add(displayNoneClass);
+    }
+    document.getElementById(tabId).classList.remove(displayNoneClass);
+    let btnName = btnElement.name;
+    let buttons = document.querySelectorAll(`[name="${btnName}"]`);
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove(btnSelectedClass);
+    }
+    btnElement.classList.add(btnSelectedClass);
 }
