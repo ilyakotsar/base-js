@@ -8,7 +8,7 @@ Paste the script into the head tag.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.3/base.js"
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.4/base.js"
   integrity="sha384-/jU0MI/vr6pLdSC7rf/bK+lS6R6mq+BwJCGC7m9j9nTXbO5PMmlogSec5qLJ170t"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
@@ -20,7 +20,7 @@ Minified (2.1 KB instead of 4.75 KB):
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.3/base.min.js"
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.4/base.min.js"
   integrity="sha384-Tj6IEqfAPfpZA4a/7+w7nDcZ2R9J9udDdysE24nJNoL9euzlZoUUPD584Jy54VAq"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
