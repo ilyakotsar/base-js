@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Base.js</title>
+  <style>
+    html {
+      color-scheme: dark;
+    }
+    body {
+      margin: auto;
+      padding: 0 10px;
+      max-width: 650px;
+      font-family: sans-serif;
+    }
+    .hidden {
+      display: none;
+    }
+    .selected {
+      color: #87ceeb;
+    }
+    #dropdown1, #dropdown2, #profile, #settings {
+      padding: 15px;
+      border: solid 1px #505050;
+    }
+    button {
+      cursor: pointer;
+    }
+    button:disabled {
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <h1>Base.js</h1>
+  <a href="https://github.com/ilyakotsar/base-js" target="_blank">GitHub</a>
+  <h3>get()</h3>
+  <button
+    type="button"
+    onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#eur|i; =hidden=|#rate-display|rc')"
+  >
+    Get USD/EUR rate
+  </button>
+  <p id="rate-display" class="hidden">
+    1 USD = <span id="eur"></span> EUR
+  </p>
+  <h3>post()</h3>
+  <form
+    onsubmit="post(event, 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
+  >
+    <input type="text" name="q" value="132.145.199.178" autocomplete="off">
+    <button type="submit">Get country by IP</button>
+  </form>
+  <p id="country-display" class="hidden">
+    Country: <span id="country"></span>
+  </p>
+  <h3>toggle()</h3>
+  <button type="button" onclick="toggle('dropdown1', this, 'icon1', 'plus', 'minus')">
+    Dropdown <span id="icon1">+</span>
+  </button>
+  <div id="dropdown1" class="hidden">
+    Click outside the dropdown to close
+  </div>
+  <button type="button" onclick="toggle('dropdown2', null, 'icon2', 'plus', 'minus')">
+    Static dropdown <span id="icon2">+</span>
+  </button>
+  <div id="plus" class="hidden">+</div>
+  <div id="minus" class="hidden">-</div>
+  <div id="dropdown2" class="hidden">
+    Click the button to close
+  </div>
+  <div id="plus" class="hidden">+</div>
+  <div id="minus" class="hidden">-</div>
+  <h3>select()</h3>
+  <button
+    type="button"
+    name="tab-buttons"
+    onclick="select('profile', 'tabs', this, 'selected')"
+  >
+    Profile
+  </button>
+  <button
+    type="button"
+    name="tab-buttons"
+    onclick="select('settings', 'tabs', this, 'selected')"
+  >
+    Settings
+  </button>
+  <div id="tabs">
+    <div id="profile" class="hidden">Profile tab</div>
+    <div id="settings" class="hidden">Settings tab</div>
+  </div>
+  <script src="/base.js"></script>
+</body>
+</html>

@@ -1,17 +1,31 @@
-# base-js
+# Base.js
 
 Basic functions for HTML.
 
 ## Connection
 
+Paste the script at the end of the body tag.
+
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.2/base.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.3/base.js"
+  integrity="sha384-HTym/HgrEdakej070DnvGHB0zrhNCWYufkslRu51vz52auGa9FtQKkT88FLZn44+"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+>
+</script>
 ```
 
-Minified:
+Minified (2.24 KB instead of 4.97 KB):
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.2/base.min.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.3/base.min.js"
+  integrity="sha384-pAhbOmFWwBELHf6dxypCGkfYPgb1VjDjtsmGiXy51Db0KblV3eZ4QN4kyrvS/lEJ"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+>
+</script>
 ```
 
 ## Requests
@@ -19,14 +33,15 @@ Minified:
 All requests are made via the Fetch API and should receive a response in JSON format.
 
 ```js
-get(url, effect);
-post(element, url, effect);
+get(url, effect='');
+post(event, url, effect='');
 ```
 
 **effect** - string with three arguments in the format 'response_key|selector|operation',
-nested keys are separated by dots, multiple effects are separated by semicolons,
-use name as a selector after *n=*\
-**element** - always equals *this*
+nested keys are separated by dots, a key turns into a value if wrapped with *=*,
+use name as a selector starting with *n=*,
+multiple effects are separated by semicolons\
+**event** - always equals *event*
 
 Operations:
 
@@ -43,81 +58,75 @@ Examples:
 ```html
 <button
   type="button"
-  id="edit"
-  onclick="get('/settings/edit', 'form|#edit|o')"
+  onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#eur|i; =hidden=|#rate-display|rc')"
 >
-  Edit
+  Get USD/EUR rate
 </button>
+<p id="rate-display" class="hidden">
+  1 USD = <span id="eur"></span> EUR
+</p>
 ```
 
 ```html
-<button
-  type="button"
-  onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#eur|i')"
+<form
+  onsubmit="post(event, 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
 >
-  Get rate
-</button>
-<div>USD: 1</div>
-<div>EUR: <span id="eur"></span></div>
-```
-
-```html
-<button
-  type="button"
-  name="theme-btn"
-  onclick="post(this, '/switch-theme', 'theme|html|c; button|n=theme-btn|o')"
->
-  <input type="hidden" name="theme" value="light">
-  light-icon
-</button>
+  <input type="text" name="q" value="132.145.199.178" autocomplete="off">
+  <button type="submit">Get country by IP</button>
+</form>
+<p id="country-display" class="hidden">
+  Country: <span id="country"></span>
+</p>
 ```
 
 ## Display
 
 ```js
-toggle(selector, element=undefined, iconA='', iconB='');
-select(tabId, tabClass, btnElement=undefined, btnSelectedClass='');
+toggle(id, btn=null, iconPlace=null, iconA='', iconB='');
+select(id, tabsId, btn=null, selectedClass='');
 ```
 
 Examples:
 
 ```html
-<button
-  type="button"
-  onclick="toggle('#menu', this, '#menu-icon', '#close-icon')"
->
-  menu-icon
+<button type="button" onclick="toggle('dropdown', this, 'icon', 'plus', 'minus')">
+  Dropdown <span id="icon">+</span>
 </button>
-<div id="menu" class="hidden"></div>
-<div id="menu-icon" class="hidden">menu-icon</div>
-<div id="close-icon" class="hidden">close-icon</div>
+<div id="dropdown" class="hidden">
+  Click outside the dropdown to close
+</div>
+<div id="plus" class="hidden">+</div>
+<div id="minus" class="hidden">-</div>
 ```
 
 ```html
 <button
   type="button"
-  name="tab-btns"
-  class="underline"
-  onclick="select('tab-1', 'tabs', this, 'underline')"
+  name="tab-buttons"
+  onclick="select('profile', 'tabs', this, 'selected')"
 >
-  Tab 1
+  Profile
 </button>
 <button
   type="button"
-  name="tab-btns"
-  onclick="select('tab-2', 'tabs', this, 'underline')"
+  name="tab-buttons"
+  onclick="select('settings', 'tabs', this, 'selected')"
 >
-  Tab 2
+  Settings
 </button>
-<div id="tab-1" class="tabs">Tab 1</div>
-<div id="tab-2" class="tabs hidden">Tab 2</div>
+<div id="tabs">
+  <div id="profile" class="hidden">Profile tab</div>
+  <div id="settings" class="hidden">Settings tab</div>
+</div>
 ```
 
 ## Customization
 
 You can change the variables as you wish.
 
-```js
-csrfTokenName = 'mycsrftoken'; // Default: csrfmiddlewaretoken
-displayNoneClass = 'd-none'; // Default: hidden
+```html
+<script>
+  csrfTokenName = 'csrf-token'; // Default: csrfmiddlewaretoken
+  displayNoneClass = 'd-none'; // Default: hidden  
+</script>
 ```
