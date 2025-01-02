@@ -82,9 +82,16 @@ function get(url, effect='') {
     });
 }
 
-function post(event, url, effect='') {
-    event.preventDefault();
-    let children = event.target.children;
+function post(element, url, effect='') {
+    let children;
+    switch (typeof element) {
+        case 'string':
+            children = document.getElementById(element).children;
+            break;
+        case 'object':
+            children = element.children;
+            break;
+    }
     let data = {};
     for (let i = 0; i < children.length; i++) {
         let name = children[i].name;
@@ -100,7 +107,16 @@ function post(event, url, effect='') {
     });
 }
 
-function applyIcon(iconPlace=null, icon='') {
+function toggle(id, iconPlace=null, iconA='', iconB='') {
+    let element = document.getElementById(id);
+    let icon;
+    if (element.classList.contains(displayNoneClass)) {
+        element.classList.remove(displayNoneClass);
+        icon = iconB;
+    } else {
+        element.classList.add(displayNoneClass);
+        icon = iconA;
+    }
     if (iconPlace !== null && icon !== '') {
         let iconElement;
         switch (typeof iconPlace) {
@@ -112,27 +128,6 @@ function applyIcon(iconPlace=null, icon='') {
                 break;
         }
         iconElement.innerHTML = document.getElementById(icon).innerHTML;
-    }
-}
-
-function toggle(id, btn=null, iconPlace=null, iconA='', iconB='') {
-    let element = document.getElementById(id);
-    let icon;
-    if (element.classList.contains(displayNoneClass)) {
-        element.classList.remove(displayNoneClass);
-        icon = iconB;
-    } else {
-        element.classList.add(displayNoneClass);
-        icon = iconA;
-    }
-    applyIcon(iconPlace, icon);
-    if (btn !== null && typeof btn === 'object') {
-        window.onclick = function(event) {
-            if (!btn.contains(event.target) && !element.contains(event.target)) {
-                element.classList.add(displayNoneClass);
-                applyIcon(iconPlace, iconA);
-            }
-        }
     }
 }
 

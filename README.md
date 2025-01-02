@@ -4,24 +4,24 @@ Basic functions for HTML.
 
 ## Connection
 
-Paste the script at the end of the body tag.
+Paste the script into the head tag.
 
 ```html
 <script
   src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.3/base.js"
-  integrity="sha384-HTym/HgrEdakej070DnvGHB0zrhNCWYufkslRu51vz52auGa9FtQKkT88FLZn44+"
+  integrity="sha384-/jU0MI/vr6pLdSC7rf/bK+lS6R6mq+BwJCGC7m9j9nTXbO5PMmlogSec5qLJ170t"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 >
 </script>
 ```
 
-Minified (2.24 KB instead of 4.97 KB):
+Minified (2.1 KB instead of 4.75 KB):
 
 ```html
 <script
   src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.3/base.min.js"
-  integrity="sha384-pAhbOmFWwBELHf6dxypCGkfYPgb1VjDjtsmGiXy51Db0KblV3eZ4QN4kyrvS/lEJ"
+  integrity="sha384-Tj6IEqfAPfpZA4a/7+w7nDcZ2R9J9udDdysE24nJNoL9euzlZoUUPD584Jy54VAq"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 >
@@ -34,14 +34,14 @@ All requests are made via the Fetch API and should receive a response in JSON fo
 
 ```js
 get(url, effect='');
-post(event, url, effect='');
+post(element, url, effect='');
 ```
 
 **effect** - string with three arguments in the format 'response_key|selector|operation',
 nested keys are separated by dots, a key turns into a value if wrapped with *=*,
 use name as a selector starting with *n=*,
 multiple effects are separated by semicolons\
-**event** - always equals *event*
+**element** - block with inputs, accepts id or *this*
 
 Operations:
 
@@ -68,12 +68,15 @@ Examples:
 ```
 
 ```html
-<form
-  onsubmit="post(event, 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
->
+<p id="form">
   <input type="text" name="q" value="132.145.199.178" autocomplete="off">
-  <button type="submit">Get country by IP</button>
-</form>
+</p>
+<button
+  type="button"
+  onclick="post('form', 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
+>
+  Get country by IP
+</button>
 <p id="country-display" class="hidden">
   Country: <span id="country"></span>
 </p>
@@ -82,21 +85,21 @@ Examples:
 ## Display
 
 ```js
-toggle(id, btn=null, iconPlace=null, iconA='', iconB='');
+toggle(id, iconPlace=null, iconA='', iconB='');
 select(id, tabsId, btn=null, selectedClass='');
 ```
 
 Examples:
 
 ```html
-<button type="button" onclick="toggle('dropdown', this, 'icon', 'plus', 'minus')">
+<button type="button" onclick="toggle('dropdown', 'icon', 'plus', 'minus')">
   Dropdown <span id="icon">+</span>
 </button>
-<div id="dropdown" class="hidden">
-  Click outside the dropdown to close
-</div>
 <div id="plus" class="hidden">+</div>
 <div id="minus" class="hidden">-</div>
+<div id="dropdown" class="hidden">
+  Dropdown content
+</div>
 ```
 
 ```html

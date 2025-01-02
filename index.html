@@ -20,7 +20,7 @@
     .selected {
       color: #87ceeb;
     }
-    #dropdown1, #dropdown2, #profile, #settings {
+    #dropdown, #profile, #settings {
       padding: 15px;
       border: solid 1px #505050;
     }
@@ -46,32 +46,27 @@
     1 USD = <span id="eur"></span> EUR
   </p>
   <h3>post()</h3>
-  <form
-    onsubmit="post(event, 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
-  >
+  <p id="form">
     <input type="text" name="q" value="132.145.199.178" autocomplete="off">
-    <button type="submit">Get country by IP</button>
-  </form>
+  </p>
+  <button
+    type="button"
+    onclick="post('form', 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
+  >
+    Get country by IP
+  </button>
   <p id="country-display" class="hidden">
     Country: <span id="country"></span>
   </p>
   <h3>toggle()</h3>
-  <button type="button" onclick="toggle('dropdown1', this, 'icon1', 'plus', 'minus')">
-    Dropdown <span id="icon1">+</span>
-  </button>
-  <div id="dropdown1" class="hidden">
-    Click outside the dropdown to close
-  </div>
-  <button type="button" onclick="toggle('dropdown2', null, 'icon2', 'plus', 'minus')">
-    Static dropdown <span id="icon2">+</span>
+  <button type="button" onclick="toggle('dropdown', 'icon', 'plus', 'minus')">
+    Dropdown <span id="icon">+</span>
   </button>
   <div id="plus" class="hidden">+</div>
   <div id="minus" class="hidden">-</div>
-  <div id="dropdown2" class="hidden">
-    Click the button to close
+  <div id="dropdown" class="hidden">
+    Dropdown content
   </div>
-  <div id="plus" class="hidden">+</div>
-  <div id="minus" class="hidden">-</div>
   <h3>select()</h3>
   <button
     type="button"
