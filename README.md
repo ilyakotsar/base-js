@@ -1,4 +1,4 @@
-# Base.js
+# base-js
 
 Basic functions for HTML.
 
