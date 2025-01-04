@@ -21,20 +21,17 @@ async function makeRequest(method, url, data={}) {
     return response.json();
 }
 
-function applyEffect(effect, response) {
+function applyEffect(response, effect='') {
+    if (effect === '') {
+        return;
+    }
     let effectArray = effect.split(';');
     for (let i = 0; i < effectArray.length; i++) {
         let parameters = effectArray[i].trim().split('|');
-        let key = parameters[0];
-        let value;
-        if (key.charAt(0) === '=' && key.charAt(key.length - 1) === '=') {
-            value = key.slice(1, key.length - 1);
-        } else {
-            let keyArray = key.split('.');
-            value = response;
-            for (let i = 0; i < keyArray.length; i++) {
-                value = value[keyArray[i]];
-            }
+        let key = parameters[0].split('.');
+        let value = response;
+        for (let i = 0; i < key.length; i++) {
+            value = value[key[i]];
         }
         let selector = parameters[1];
         let operation = parameters[2];
@@ -76,9 +73,7 @@ function applyEffect(effect, response) {
 
 function get(url, effect='') {
     makeRequest('GET', url).then(response => {
-        if (effect !== '') {
-            applyEffect(effect, response);
-        }
+        applyEffect(response, effect);
     });
 }
 
@@ -101,49 +96,58 @@ function post(element, url, effect='') {
         }
     }
     makeRequest('POST', url, data).then(response => {
-        if (effect !== '') {
-            applyEffect(effect, response);
-        }
+        applyEffect(response, effect);
     });
 }
 
-function toggle(id, iconPlace=null, iconA='', iconB='') {
+function toggleBase(id, icons='', fixed=false) {
     let element = document.getElementById(id);
+    let iconsArray = icons.split('|');
+    let iconPlace = iconsArray[0];
+    let iconA = iconsArray[1];
+    let iconB = iconsArray[2];
     let icon;
     if (element.classList.contains(displayNoneClass)) {
         element.classList.remove(displayNoneClass);
         icon = iconB;
+        if (fixed) {
+            document.body.style.overflow = 'hidden';
+        }
     } else {
         element.classList.add(displayNoneClass);
         icon = iconA;
-    }
-    if (iconPlace !== null && icon !== '') {
-        let iconElement;
-        switch (typeof iconPlace) {
-            case 'string':
-                iconElement = document.getElementById(iconPlace);
-                break;
-            case 'object':
-                iconElement = iconPlace;
-                break;
+        if (fixed) {
+            document.body.style.overflow = 'auto';
         }
+    }
+    if (icons !== '') {
+        let iconElement = document.getElementById(iconPlace);
         iconElement.innerHTML = document.getElementById(icon).innerHTML;
     }
 }
 
-function select(id, tabsId, btn=null, selectedClass='') {
+function toggle(id, icons='') {
+    toggleBase(id, icons);
+}
+
+function toggleFixed(id, icons='') {
+    toggleBase(id, icons, true);
+}
+
+function select(ids, btn=null, selectedClass='') {
+    let idsArray = ids.split('|');
+    let tabId = idsArray[0];
+    let tabsId = idsArray[1];
     let tabs = document.getElementById(tabsId).children;
     for (let i = 0; i < tabs.length; i++) {
         tabs[i].classList.add(displayNoneClass);
     }
-    document.getElementById(id).classList.remove(displayNoneClass);
+    document.getElementById(tabId).classList.remove(displayNoneClass);
     if (btn !== null && selectedClass !== '') {
         let buttons = document.querySelectorAll(`[name="${btn.name}"]`);
         for (let i = 0; i < buttons.length; i++) {
             buttons[i].classList.remove(selectedClass);
-            buttons[i].disabled = false;
         }
         btn.classList.add(selectedClass);
-        btn.disabled = true;
     }
 }

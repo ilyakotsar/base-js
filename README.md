@@ -8,20 +8,8 @@ Paste the script into the head tag.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.4/base.js"
-  integrity="sha384-/jU0MI/vr6pLdSC7rf/bK+lS6R6mq+BwJCGC7m9j9nTXbO5PMmlogSec5qLJ170t"
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
->
-</script>
-```
-
-Minified (2.1 KB instead of 4.75 KB):
-
-```html
-<script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.4/base.min.js"
-  integrity="sha384-Tj6IEqfAPfpZA4a/7+w7nDcZ2R9J9udDdysE24nJNoL9euzlZoUUPD584Jy54VAq"
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.5/base.js"
+  integrity="sha384-cWVwarPnxHbtA2ppfbXva8cmfnZMoTi7cqwzN8TqHNKHmGme26jltOZQeC6Z3il8"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 >
@@ -37,9 +25,8 @@ get(url, effect='');
 post(element, url, effect='');
 ```
 
-**effect** - string with three arguments in the format 'response_key|selector|operation',
-nested keys are separated by dots, a key turns into a value if wrapped with *=*,
-use name as a selector starting with *n=*,
+**effect** - string with three arguments in the format 'responseKey|selector|operation',
+nested keys are separated by dots, use name as a selector starting with *n=*,
 multiple effects are separated by semicolons\
 **element** - block with inputs, accepts id or *this*
 
@@ -58,41 +45,42 @@ Examples:
 ```html
 <button
   type="button"
-  onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#eur|i; =hidden=|#rate-display|rc')"
+  onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#rate|i')"
 >
   Get USD/EUR rate
 </button>
-<p id="rate-display" class="hidden">
-  1 USD = <span id="eur"></span> EUR
-</p>
+<p id="rate"></p>
 ```
 
 ```html
-<p id="form">
+<p id="data">
   <input type="text" name="q" value="132.145.199.178" autocomplete="off">
 </p>
 <button
   type="button"
-  onclick="post('form', 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
+  onclick="post('data', 'https:\/\/api.ipapi.is', 'location.country|#country|i')"
 >
   Get country by IP
 </button>
-<p id="country-display" class="hidden">
-  Country: <span id="country"></span>
-</p>
+<p id="country"></p>
 ```
 
 ## Display
 
 ```js
-toggle(id, iconPlace=null, iconA='', iconB='');
-select(id, tabsId, btn=null, selectedClass='');
+toggle(id, icons='');
+toggleFixed(id, icons='');
+select(ids, btn=null, selectedClass='');
 ```
+
+**icons** - string with three arguments in the format 'iconPlaceId|iconAId|iconBId'\
+**ids** - string with two arguments in the format 'tabId|tabsId'\
+**btn** - always *this*, the buttons must have the same name
 
 Examples:
 
 ```html
-<button type="button" onclick="toggle('dropdown', 'icon', 'plus', 'minus')">
+<button type="button" onclick="toggle('dropdown', 'icon|plus|minus')">
   Dropdown <span id="icon">+</span>
 </button>
 <div id="plus" class="hidden">+</div>
@@ -106,19 +94,20 @@ Examples:
 <button
   type="button"
   name="tab-buttons"
-  onclick="select('profile', 'tabs', this, 'selected')"
+  class="selected"
+  onclick="select('profile|tabs', this, 'selected')"
 >
   Profile
 </button>
 <button
   type="button"
   name="tab-buttons"
-  onclick="select('settings', 'tabs', this, 'selected')"
+  onclick="select('settings|tabs', this, 'selected')"
 >
   Settings
 </button>
 <div id="tabs">
-  <div id="profile" class="hidden">Profile tab</div>
+  <div id="profile">Profile tab</div>
   <div id="settings" class="hidden">Settings tab</div>
 </div>
 ```

@@ -24,12 +24,6 @@
       padding: 15px;
       border: solid 1px #505050;
     }
-    button {
-      cursor: pointer;
-    }
-    button:disabled {
-      cursor: default;
-    }
   </style>
 </head>
 <body>
@@ -38,28 +32,24 @@
   <h3>get()</h3>
   <button
     type="button"
-    onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#eur|i; =hidden=|#rate-display|rc')"
+    onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#rate|i')"
   >
     Get USD/EUR rate
   </button>
-  <p id="rate-display" class="hidden">
-    1 USD = <span id="eur"></span> EUR
-  </p>
+  <p id="rate"></p>
   <h3>post()</h3>
-  <p id="form">
+  <p id="data">
     <input type="text" name="q" value="132.145.199.178" autocomplete="off">
   </p>
   <button
     type="button"
-    onclick="post('form', 'https:\/\/api.ipapi.is', 'location.country|#country|i; =hidden=|#country-display|rc')"
+    onclick="post('data', 'https:\/\/api.ipapi.is', 'location.country|#country|i')"
   >
     Get country by IP
   </button>
-  <p id="country-display" class="hidden">
-    Country: <span id="country"></span>
-  </p>
-  <h3>toggle()</h3>
-  <button type="button" onclick="toggle('dropdown', 'icon', 'plus', 'minus')">
+  <p id="country"></p>
+  <h3>toggle(), toggleFixed()</h3>
+  <button type="button" onclick="toggle('dropdown', 'icon|plus|minus')">
     Dropdown <span id="icon">+</span>
   </button>
   <div id="plus" class="hidden">+</div>
@@ -71,19 +61,20 @@
   <button
     type="button"
     name="tab-buttons"
-    onclick="select('profile', 'tabs', this, 'selected')"
+    class="selected"
+    onclick="select('profile|tabs', this, 'selected')"
   >
     Profile
   </button>
   <button
     type="button"
     name="tab-buttons"
-    onclick="select('settings', 'tabs', this, 'selected')"
+    onclick="select('settings|tabs', this, 'selected')"
   >
     Settings
   </button>
   <div id="tabs">
-    <div id="profile" class="hidden">Profile tab</div>
+    <div id="profile">Profile tab</div>
     <div id="settings" class="hidden">Settings tab</div>
   </div>
   <script src="/base-js/base.js"></script>
