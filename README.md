@@ -8,12 +8,11 @@ Paste the script into the head tag.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.5/base.js"
-  integrity="sha384-cWVwarPnxHbtA2ppfbXva8cmfnZMoTi7cqwzN8TqHNKHmGme26jltOZQeC6Z3il8"
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.6/base.js"
+  integrity="sha384-XPE8zoulXmeo6IeQ6+gnz7NYoKz3VnVLIhYu0JKbQFN6v/WvYJx0Kjb1FLpjQO47"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
->
-</script>
+></script>
 ```
 
 ## Requests
@@ -70,12 +69,12 @@ Examples:
 ```js
 toggle(id, icons='');
 toggleFixed(id, icons='');
-select(ids, btn=null, selectedClass='');
+select(id, btn, classes='');
 ```
 
 **icons** - string with three arguments in the format 'iconPlaceId|iconAId|iconBId'\
-**ids** - string with two arguments in the format 'tabId|tabsId'\
-**btn** - always *this*, the buttons must have the same name
+**btn** - always *this*, the buttons must have the same name, and be equal to tabsId\
+**classes** - classes for buttons of active tabs, separated by spaces
 
 Examples:
 
@@ -93,16 +92,16 @@ Examples:
 ```html
 <button
   type="button"
-  name="tab-buttons"
-  class="selected"
-  onclick="select('profile|tabs', this, 'selected')"
+  name="tabs"
+  class="sky bold"
+  onclick="select('profile', this, 'sky bold')"
 >
   Profile
 </button>
 <button
   type="button"
-  name="tab-buttons"
-  onclick="select('settings|tabs', this, 'selected')"
+  name="tabs"
+  onclick="select('settings', this, 'sky bold')"
 >
   Settings
 </button>

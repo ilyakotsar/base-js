@@ -111,13 +111,16 @@ function toggleBase(id, icons='', fixed=false) {
         element.classList.remove(displayNoneClass);
         icon = iconB;
         if (fixed) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.setProperty('overflow', 'hidden');
         }
     } else {
         element.classList.add(displayNoneClass);
         icon = iconA;
         if (fixed) {
-            document.body.style.overflow = 'auto';
+            document.body.style.removeProperty('overflow');
+            if (document.body.style.cssText === '') {
+                document.body.removeAttribute('style');
+            }
         }
     }
     if (icons !== '') {
@@ -134,20 +137,22 @@ function toggleFixed(id, icons='') {
     toggleBase(id, icons, true);
 }
 
-function select(ids, btn=null, selectedClass='') {
-    let idsArray = ids.split('|');
-    let tabId = idsArray[0];
-    let tabsId = idsArray[1];
-    let tabs = document.getElementById(tabsId).children;
+function select(id, btn, classes='') {
+    let tabs = document.getElementById(btn.name).children;
     for (let i = 0; i < tabs.length; i++) {
         tabs[i].classList.add(displayNoneClass);
     }
-    document.getElementById(tabId).classList.remove(displayNoneClass);
-    if (btn !== null && selectedClass !== '') {
+    document.getElementById(id).classList.remove(displayNoneClass);
+    if (classes !== '') {
+        let classesArray = classes.split(' ');
         let buttons = document.querySelectorAll(`[name="${btn.name}"]`);
         for (let i = 0; i < buttons.length; i++) {
-            buttons[i].classList.remove(selectedClass);
+            for (let x = 0; x < classesArray.length; x++) {
+                buttons[i].classList.remove(classesArray[x]);
+            }
         }
-        btn.classList.add(selectedClass);
+        for (let x = 0; x < classesArray.length; x++) {
+            btn.classList.add(classesArray[x]);
+        }
     }
 }

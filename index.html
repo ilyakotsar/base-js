@@ -17,14 +17,18 @@
     .hidden {
       display: none;
     }
-    .selected {
+    .sky {
       color: #87ceeb;
+    }
+    .bold {
+      font-weight: bold;
     }
     #dropdown, #profile, #settings {
       padding: 15px;
       border: solid 1px #505050;
     }
   </style>
+  <script src="/base-js/base.js"></script>
 </head>
 <body>
   <h1>base-js</h1>
@@ -60,16 +64,16 @@
   <h3>select()</h3>
   <button
     type="button"
-    name="tab-buttons"
-    class="selected"
-    onclick="select('profile|tabs', this, 'selected')"
+    name="tabs"
+    class="sky bold"
+    onclick="select('profile', this, 'sky bold')"
   >
     Profile
   </button>
   <button
     type="button"
-    name="tab-buttons"
-    onclick="select('settings|tabs', this, 'selected')"
+    name="tabs"
+    onclick="select('settings', this, 'sky bold')"
   >
     Settings
   </button>
@@ -77,6 +81,5 @@
     <div id="profile">Profile tab</div>
     <div id="settings" class="hidden">Settings tab</div>
   </div>
-  <script src="/base-js/base.js"></script>
 </body>
 </html>
