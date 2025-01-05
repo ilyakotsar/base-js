@@ -11,8 +11,8 @@
     body {
       margin: auto;
       padding: 0 10px;
-      max-width: 650px;
-      font-family: sans-serif;
+      max-width: 600px;
+      font-family: system-ui, sans-serif;
     }
     .hidden {
       display: none;
@@ -53,7 +53,7 @@
   </button>
   <p id="country"></p>
   <h3>toggle(), toggleFixed()</h3>
-  <button type="button" onclick="toggle('dropdown', 'icon|plus|minus')">
+  <button type="button" onclick="toggle('dropdown', 'icon', 'plus|minus')">
     Dropdown <span id="icon">+</span>
   </button>
   <div id="plus" class="hidden">+</div>
@@ -61,6 +61,11 @@
   <div id="dropdown" class="hidden">
     Dropdown content
   </div>
+  <h3>togglePassword()</h3>
+  <input type="password" id="password" value="Password">
+  <button onclick="togglePassword('password', this, 'show|hide')">Show</button>
+  <div id="show" class="hidden">Show</div>
+  <div id="hide" class="hidden">Hide</div>
   <h3>select()</h3>
   <button
     type="button"
@@ -81,5 +86,10 @@
     <div id="profile">Profile tab</div>
     <div id="settings" class="hidden">Settings tab</div>
   </div>
+  <h3>copy()</h3>
+  <p id="text">Text</p>
+  <button onclick="copy('text', this, 'copy|copied')">Copy</button>
+  <div id="copy" class="hidden">Copy</div>
+  <div id="copied" class="hidden">Copied</div>
 </body>
 </html>

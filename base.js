@@ -21,7 +21,7 @@ async function makeRequest(method, url, data={}) {
     return response.json();
 }
 
-function applyEffect(response, effect='') {
+function applyEffect(response, effect) {
     if (effect === '') {
         return;
     }
@@ -100,22 +100,34 @@ function post(element, url, effect='') {
     });
 }
 
-function toggleBase(id, icons='', fixed=false) {
+function applyIcon(iconPlace, icon) {
+    if (iconPlace !== null && icon !== '') {
+        let iconElement;
+        switch (typeof iconPlace) {
+            case 'string':
+                iconElement = document.getElementById(iconPlace);
+                break;
+            case 'object':
+                iconElement = iconPlace;
+                break;
+        }
+        iconElement.innerHTML = document.getElementById(icon).innerHTML;
+    }
+}
+
+function toggleBase(id, iconPlace=null, icons='', fixed=false) {
     let element = document.getElementById(id);
     let iconsArray = icons.split('|');
-    let iconPlace = iconsArray[0];
-    let iconA = iconsArray[1];
-    let iconB = iconsArray[2];
     let icon;
     if (element.classList.contains(displayNoneClass)) {
         element.classList.remove(displayNoneClass);
-        icon = iconB;
+        icon = iconsArray[1];
         if (fixed) {
             document.body.style.setProperty('overflow', 'hidden');
         }
     } else {
         element.classList.add(displayNoneClass);
-        icon = iconA;
+        icon = iconsArray[0];
         if (fixed) {
             document.body.style.removeProperty('overflow');
             if (document.body.style.cssText === '') {
@@ -123,18 +135,29 @@ function toggleBase(id, icons='', fixed=false) {
             }
         }
     }
-    if (icons !== '') {
-        let iconElement = document.getElementById(iconPlace);
-        iconElement.innerHTML = document.getElementById(icon).innerHTML;
+    applyIcon(iconPlace, icon);
+}
+
+function toggle(id, iconPlace=null, icons='') {
+    toggleBase(id, iconPlace, icons);
+}
+
+function toggleFixed(id, iconPlace=null, icons='') {
+    toggleBase(id, iconPlace, icons, true);
+}
+
+function togglePassword(id, iconPlace=null, icons='') {
+    let password = document.getElementById(id);
+    let iconsArray = icons.split('|');
+    let icon;
+    if (password.type === 'password') {
+        password.type = 'text';
+        icon = iconsArray[1];
+    } else {
+        password.type = 'password';
+        icon = iconsArray[0];
     }
-}
-
-function toggle(id, icons='') {
-    toggleBase(id, icons);
-}
-
-function toggleFixed(id, icons='') {
-    toggleBase(id, icons, true);
+    applyIcon(iconPlace, icon);
 }
 
 function select(id, btn, classes='') {
@@ -155,4 +178,21 @@ function select(id, btn, classes='') {
             btn.classList.add(classesArray[x]);
         }
     }
+}
+
+function copy(id, iconPlace=null, icons='', delay=1500) {
+    let text = document.getElementById(id);
+    let value = text.value;
+    if (value === undefined) {
+        value = text.innerHTML;
+    }
+    navigator.clipboard.writeText(value).then(() => {
+        if (iconPlace !== null && icons !== '') {
+            let iconsArray = icons.split('|');
+            applyIcon(iconPlace, iconsArray[1]);
+            setTimeout(() => {
+                applyIcon(iconPlace, iconsArray[0]);
+            }, delay);
+        }
+    });
 }

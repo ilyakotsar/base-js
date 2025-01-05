@@ -8,8 +8,8 @@ Paste the script into the head tag.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.6/base.js"
-  integrity="sha384-XPE8zoulXmeo6IeQ6+gnz7NYoKz3VnVLIhYu0JKbQFN6v/WvYJx0Kjb1FLpjQO47"
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.7/base.js"
+  integrity="sha384-Q9mLjDp2ZSnJf6tQLkXh+8YLzopMXBeQyrjfpYeoQp/GZi9TTD8AFcpdnnt85UWw"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 ></script>
@@ -67,19 +67,22 @@ Examples:
 ## Display
 
 ```js
-toggle(id, icons='');
-toggleFixed(id, icons='');
+toggle(id, iconPlace=null, icons='');
+toggleFixed(id, iconPlace=null, icons='');
+togglePassword(id, iconPlace=null, icons='');
 select(id, btn, classes='');
+copy(id, iconPlace=null, icons='', delay=1500);
 ```
 
-**icons** - string with three arguments in the format 'iconPlaceId|iconAId|iconBId'\
-**btn** - always *this*, the buttons must have the same name, and be equal to tabsId\
+**iconPlace** - id or *this*\
+**icons** - string with two arguments in the format 'iconAId|iconBId'\
+**btn** - always *this*, the buttons must have the same name and be equal to tabsId\
 **classes** - classes for buttons of active tabs, separated by spaces
 
 Examples:
 
 ```html
-<button type="button" onclick="toggle('dropdown', 'icon|plus|minus')">
+<button type="button" onclick="toggle('dropdown', 'icon', 'plus|minus')">
   Dropdown <span id="icon">+</span>
 </button>
 <div id="plus" class="hidden">+</div>
@@ -87,6 +90,13 @@ Examples:
 <div id="dropdown" class="hidden">
   Dropdown content
 </div>
+```
+
+```html
+<input type="password" id="password" value="Password">
+<button onclick="togglePassword('password', this, 'show|hide')">Show</button>
+<div id="show" class="hidden">Show</div>
+<div id="hide" class="hidden">Hide</div>
 ```
 
 ```html
@@ -109,6 +119,13 @@ Examples:
   <div id="profile">Profile tab</div>
   <div id="settings" class="hidden">Settings tab</div>
 </div>
+```
+
+```html
+<p id="text">Text</p>
+<button onclick="copy('text', this, 'copy|copied')">Copy</button>
+<div id="copy" class="hidden">Copy</div>
+<div id="copied" class="hidden">Copied</div>
 ```
 
 ## Customization
