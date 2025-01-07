@@ -1,7 +1,7 @@
 let csrfTokenName = 'csrfmiddlewaretoken';
 let displayNoneClass = 'hidden';
 
-async function baseJsMakeFetchRequest(method, url, data={}) {
+async function baseJsMakeRequest(method, url, data={}) {
     let options = {
         method: method,
         credentials: 'same-origin',
@@ -74,7 +74,7 @@ function apply(effect, data=null) {
 }
 
 function get(url, effect='') {
-    baseJsMakeFetchRequest('GET', url).then(response => {
+    baseJsMakeRequest('GET', url).then(response => {
         apply(effect, response);
     });
 }
@@ -97,7 +97,7 @@ function post(element, url, effect='') {
             data[name] = value;
         }
     }
-    baseJsMakeFetchRequest('POST', url, data).then(response => {
+    baseJsMakeRequest('POST', url, data).then(response => {
         apply(effect, response);
     });
 }
