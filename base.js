@@ -1,7 +1,7 @@
 let csrfTokenName = 'csrfmiddlewaretoken';
 let displayNoneClass = 'hidden';
 
-async function makeRequest(method, url, data={}) {
+async function baseJsMakeFetchRequest(method, url, data={}) {
     let options = {
         method: method,
         credentials: 'same-origin',
@@ -21,17 +21,19 @@ async function makeRequest(method, url, data={}) {
     return response.json();
 }
 
-function applyEffect(response, effect) {
-    if (effect === '') {
-        return;
-    }
+function apply(effect, data=null) {
     let effectArray = effect.split(';');
     for (let i = 0; i < effectArray.length; i++) {
         let parameters = effectArray[i].trim().split('|');
-        let key = parameters[0].split('.');
-        let value = response;
-        for (let i = 0; i < key.length; i++) {
-            value = value[key[i]];
+        let value;
+        if (data === null) {
+            value = parameters[0];
+        } else {
+            value = data;
+            let key = parameters[0].split('.');
+            for (let i = 0; i < key.length; i++) {
+                value = value[key[i]];
+            }
         }
         let selector = parameters[1];
         let operation = parameters[2];
@@ -72,8 +74,8 @@ function applyEffect(response, effect) {
 }
 
 function get(url, effect='') {
-    makeRequest('GET', url).then(response => {
-        applyEffect(response, effect);
+    baseJsMakeFetchRequest('GET', url).then(response => {
+        apply(effect, response);
     });
 }
 
@@ -95,12 +97,12 @@ function post(element, url, effect='') {
             data[name] = value;
         }
     }
-    makeRequest('POST', url, data).then(response => {
-        applyEffect(response, effect);
+    baseJsMakeFetchRequest('POST', url, data).then(response => {
+        apply(effect, response);
     });
 }
 
-function applyIcon(iconPlace, icon) {
+function baseJsDisplayIcon(iconPlace, icon) {
     if (iconPlace !== null && icon !== '') {
         let iconElement;
         switch (typeof iconPlace) {
@@ -115,7 +117,7 @@ function applyIcon(iconPlace, icon) {
     }
 }
 
-function toggleBase(id, iconPlace=null, icons='', fixed=false) {
+function baseJsToggleBase(id, iconPlace=null, icons='', fixed=false) {
     let element = document.getElementById(id);
     let iconsArray = icons.split('|');
     let icon;
@@ -130,20 +132,17 @@ function toggleBase(id, iconPlace=null, icons='', fixed=false) {
         icon = iconsArray[0];
         if (fixed) {
             document.body.style.removeProperty('overflow');
-            if (document.body.style.cssText === '') {
-                document.body.removeAttribute('style');
-            }
         }
     }
-    applyIcon(iconPlace, icon);
+    baseJsDisplayIcon(iconPlace, icon);
 }
 
 function toggle(id, iconPlace=null, icons='') {
-    toggleBase(id, iconPlace, icons);
+    baseJsToggleBase(id, iconPlace, icons);
 }
 
 function toggleFixed(id, iconPlace=null, icons='') {
-    toggleBase(id, iconPlace, icons, true);
+    baseJsToggleBase(id, iconPlace, icons, true);
 }
 
 function togglePassword(id, iconPlace=null, icons='') {
@@ -157,7 +156,7 @@ function togglePassword(id, iconPlace=null, icons='') {
         password.type = 'password';
         icon = iconsArray[0];
     }
-    applyIcon(iconPlace, icon);
+    baseJsDisplayIcon(iconPlace, icon);
 }
 
 function select(id, btn, classes='') {
@@ -180,19 +179,35 @@ function select(id, btn, classes='') {
     }
 }
 
-function copy(id, iconPlace=null, icons='', delay=1500) {
-    let text = document.getElementById(id);
-    let value = text.value;
+function copyText(id, iconPlace=null, icons='', delay=1000) {
+    let element = document.getElementById(id);
+    let value = element.value;
     if (value === undefined) {
-        value = text.innerHTML;
+        value = element.textContent;
     }
     navigator.clipboard.writeText(value).then(() => {
         if (iconPlace !== null && icons !== '') {
             let iconsArray = icons.split('|');
-            applyIcon(iconPlace, iconsArray[1]);
+            baseJsDisplayIcon(iconPlace, iconsArray[1]);
             setTimeout(() => {
-                applyIcon(iconPlace, iconsArray[0]);
+                baseJsDisplayIcon(iconPlace, iconsArray[0]);
             }, delay);
         }
     });
+}
+
+function expandTextarea(textarea, heightLimit=200) {
+    textarea.style.setProperty('height', '');
+    let padding = getComputedStyle(textarea).getPropertyValue('padding');
+    let value = Math.min(textarea.scrollHeight, heightLimit) - (parseInt(padding) * 2);
+    let height = `${value}px`;
+    textarea.style.setProperty('height', height);
+}
+
+function displayValue(element, id) {
+    document.getElementById(id).innerHTML = element.value;
+}
+
+function removeValue(id) {
+    document.getElementById(id).value = '';
 }

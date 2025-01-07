@@ -8,14 +8,14 @@ Paste the script into the head tag.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.7/base.js"
-  integrity="sha384-Q9mLjDp2ZSnJf6tQLkXh+8YLzopMXBeQyrjfpYeoQp/GZi9TTD8AFcpdnnt85UWw"
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.8/base.js"
+  integrity="sha384-EoufqLuuco68w6T02ZX9O79PXEjhNDQ28pbRMtDC6ziWStEKt8wcXEboxYpUUYTt"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 ></script>
 ```
 
-## Requests
+## Request functions
 
 All requests are made via the Fetch API and should receive a response in JSON format.
 
@@ -42,10 +42,7 @@ Operations:
 Examples:
 
 ```html
-<button
-  type="button"
-  onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#rate|i')"
->
+<button onclick="get('https:\/\/open.er-api.com/v6/latest/USD', 'rates.EUR|#rate|i')">
   Get USD/EUR rate
 </button>
 <p id="rate"></p>
@@ -55,25 +52,27 @@ Examples:
 <p id="data">
   <input type="text" name="q" value="132.145.199.178" autocomplete="off">
 </p>
-<button
-  type="button"
-  onclick="post('data', 'https:\/\/api.ipapi.is', 'location.country|#country|i')"
->
+<button onclick="post('data', 'https:\/\/api.ipapi.is', 'location.country|#country|i')">
   Get country by IP
 </button>
 <p id="country"></p>
 ```
 
-## Display
+## Client functions
 
 ```js
+apply(effect, data=null);
 toggle(id, iconPlace=null, icons='');
 toggleFixed(id, iconPlace=null, icons='');
 togglePassword(id, iconPlace=null, icons='');
 select(id, btn, classes='');
-copy(id, iconPlace=null, icons='', delay=1500);
+copyText(id, iconPlace=null, icons='', delay=1000);
+expandTextarea(textarea, heightLimit=200);
+displayValue(element, id);
+removeValue(id);
 ```
 
+**effect** - effect as in requests, but if the data is null, the key is turned into a value\
 **iconPlace** - id or *this*\
 **icons** - string with two arguments in the format 'iconAId|iconBId'\
 **btn** - always *this*, the buttons must have the same name and be equal to tabsId\
@@ -82,14 +81,17 @@ copy(id, iconPlace=null, icons='', delay=1500);
 Examples:
 
 ```html
-<button type="button" onclick="toggle('dropdown', 'icon', 'plus|minus')">
+<button onclick="apply('sky|h1|ac')">Change color of h1 tag</button>
+```
+
+```html
+<button onclick="toggle('dropdown', 'icon', 'plus|minus')">
   Dropdown <span id="icon">+</span>
 </button>
+<button onclick="toggleFixed('dropdown')">Fixed dropdown</button>
 <div id="plus" class="hidden">+</div>
 <div id="minus" class="hidden">-</div>
-<div id="dropdown" class="hidden">
-  Dropdown content
-</div>
+<div id="dropdown" class="hidden">Dropdown content</div>
 ```
 
 ```html
@@ -100,19 +102,10 @@ Examples:
 ```
 
 ```html
-<button
-  type="button"
-  name="tabs"
-  class="sky bold"
-  onclick="select('profile', this, 'sky bold')"
->
+<button name="tabs" class="sky bold" onclick="select('profile', this, 'sky bold')">
   Profile
 </button>
-<button
-  type="button"
-  name="tabs"
-  onclick="select('settings', this, 'sky bold')"
->
+<button name="tabs" onclick="select('settings', this, 'sky bold')">
   Settings
 </button>
 <div id="tabs">
@@ -122,10 +115,18 @@ Examples:
 ```
 
 ```html
-<p id="text">Text</p>
-<button onclick="copy('text', this, 'copy|copied')">Copy</button>
+<p>
+  <textarea id="text" rows="2" oninput="expandTextarea(this)">Text</textarea>
+</p>
+<button onclick="copyText('text', this, 'copy|copied')">Copy</button>
+<button onclick="removeValue('text')">Remove</button>
 <div id="copy" class="hidden">Copy</div>
 <div id="copied" class="hidden">Copied</div>
+```
+
+```html
+<input type="range" oninput="displayValue(this, 'range')" value="50" autocomplete="off">
+<div id="range">50</div>
 ```
 
 ## Customization
@@ -135,6 +136,16 @@ You can change the variables as you wish.
 ```html
 <script>
   csrfTokenName = 'csrf-token'; // Default: csrfmiddlewaretoken
-  displayNoneClass = 'd-none'; // Default: hidden  
+  displayNoneClass = 'd-none'; // Default: hidden
 </script>
+```
+
+You can write your own functions using library functions.
+
+```js
+function myFunction() {
+  baseJsMakeFetchRequest('GET', '/test').then(response => {
+    apply('test|n=test|o', response);
+  });
+}
 ```
