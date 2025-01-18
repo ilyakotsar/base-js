@@ -8,8 +8,8 @@ Paste the script into the head tag.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.1.9/base.js"
-  integrity="sha384-dhRZSrjJYj4u8MJmAiF7Oq8x8sId8T+9kHLKEecCWAjYZsglFZEgMZmAOqJNIaer"
+  src="https://cdn.jsdelivr.net/gh/ilyakotsar/base-js@0.2.0/base.js"
+  integrity="sha384-ijWXd+l2MS+prWSbH8NEYPrfMSHFa3QkJsPfh85qlMWd3jePJQSL7z9Sf0Bg4er8"
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 ></script>
@@ -21,13 +21,13 @@ All requests are made via the Fetch API and should receive a response in JSON fo
 
 ```js
 get(url, effect='');
-post(element, url, effect='');
+post(form, url, effect='');
 ```
 
 **effect** - string with three arguments in the format 'responseKey|selector|operation',
 nested keys are separated by dots, use name as a selector starting with *n=*,
 multiple effects are separated by semicolons\
-**element** - block with inputs, accepts id or *this*
+**form** - block with inputs, accepts id or *this*
 
 Operations:
 
@@ -49,10 +49,10 @@ Examples:
 ```
 
 ```html
-<p id="data">
+<p id="form">
   <input type="text" name="q" value="132.145.199.178" autocomplete="off">
 </p>
-<button onclick="post('data', 'https:\/\/api.ipapi.is', 'location.country|#country|i')">
+<button onclick="post('form', 'https:\/\/api.ipapi.is', 'location.country|#country|i')">
   Get country by IP
 </button>
 <p id="country"></p>
@@ -66,10 +66,12 @@ toggle(id, iconPlace=null, icons='');
 toggleFixed(id, iconPlace=null, icons='');
 togglePassword(id, iconPlace=null, icons='');
 select(id, btn, classes='');
-copyText(id, iconPlace=null, icons='', delay=1000);
-expandTextarea(textarea, heightLimit=200);
+copy(id, iconPlace=null, icons='', delay=1000);
+adjustHeight(elementOrId, limit=200);
 displayValue(element, id);
 removeValue(id);
+toTop();
+toTopSmooth();
 ```
 
 **effect** - effect as in requests, but if the data is null, the key is turned into a value\
@@ -116,9 +118,9 @@ Examples:
 
 ```html
 <p>
-  <textarea id="text" rows="2" oninput="expandTextarea(this)">Text</textarea>
+  <textarea id="text" rows="2" oninput="adjustHeight(this)" autocomplete="off">Text</textarea>
 </p>
-<button onclick="copyText('text', this, 'copy|copied')">Copy</button>
+<button onclick="copy('text', this, 'copy|copied')">Copy</button>
 <button onclick="removeValue('text')">Remove</button>
 <div id="copy" class="hidden">Copy</div>
 <div id="copied" class="hidden">Copied</div>
@@ -126,7 +128,12 @@ Examples:
 
 ```html
 <input type="range" oninput="displayValue(this, 'range')" value="50" autocomplete="off">
-<div id="range">50</div>
+<span id="range">50</span>
+```
+
+```html
+<button onclick="toTop()">To top</button>
+<button onclick="toTopSmooth()">To top smooth</button>
 ```
 
 ## Customization
@@ -140,12 +147,12 @@ You can change the variables as you wish.
 </script>
 ```
 
-You can write your own functions using library functions.
+You can use the library functions.
 
-```js
-function myFunction() {
-  baseJsMakeRequest('GET', '/test').then(response => {
+```html
+<script>
+  baseJsRequest('get', '/test').then(response => {
     apply('test|n=test|o', response);
   });
-}
+</script>
 ```

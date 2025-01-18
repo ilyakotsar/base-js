@@ -1,13 +1,13 @@
 let csrfTokenName = 'csrfmiddlewaretoken';
 let displayNoneClass = 'hidden';
 
-async function baseJsMakeRequest(method, url, data={}) {
+async function baseJsRequest(method, url, data={}) {
     let options = {
-        method: method,
+        method: method.toUpperCase(),
         credentials: 'same-origin',
         referrerPolicy: 'no-referrer',
     };
-    if (method === 'POST') {
+    if (options.method === 'POST') {
         options.body = JSON.stringify(data);
         options.headers = {
             'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ async function baseJsMakeRequest(method, url, data={}) {
         }
     }
     let response = await fetch(url, options);
-    return response.json();
+    return await response.json();
 }
 
 function apply(effect, data=null) {
@@ -73,22 +73,28 @@ function apply(effect, data=null) {
     }
 }
 
+function baseJsGetElement(elementOrId) {
+    let element;
+    switch (typeof elementOrId) {
+        case 'object':
+            element = elementOrId;
+            break;
+        case 'string':
+            element = document.getElementById(elementOrId);
+            break;
+    }
+    return element;
+}
+
 function get(url, effect='') {
-    baseJsMakeRequest('GET', url).then(response => {
+    baseJsRequest('get', url).then(response => {
         apply(effect, response);
     });
 }
 
-function post(element, url, effect='') {
-    let children;
-    switch (typeof element) {
-        case 'string':
-            children = document.getElementById(element).children;
-            break;
-        case 'object':
-            children = element.children;
-            break;
-    }
+function post(form, url, effect='') {
+    let element = baseJsGetElement(form);
+    let children = element.children;
     let data = {};
     for (let i = 0; i < children.length; i++) {
         let name = children[i].name;
@@ -97,23 +103,15 @@ function post(element, url, effect='') {
             data[name] = value;
         }
     }
-    baseJsMakeRequest('POST', url, data).then(response => {
+    baseJsRequest('post', url, data).then(response => {
         apply(effect, response);
     });
 }
 
-function baseJsDisplayIcon(iconPlace, icon) {
-    if (iconPlace !== null && icon !== '') {
-        let iconElement;
-        switch (typeof iconPlace) {
-            case 'string':
-                iconElement = document.getElementById(iconPlace);
-                break;
-            case 'object':
-                iconElement = iconPlace;
-                break;
-        }
-        iconElement.innerHTML = document.getElementById(icon).innerHTML;
+function baseJsDisplayIcon(place, icon) {
+    if (place !== null && icon !== '') {
+        let element = baseJsGetElement(place);
+        element.innerHTML = document.getElementById(icon).innerHTML;
     }
 }
 
@@ -179,7 +177,7 @@ function select(id, btn, classes='') {
     }
 }
 
-function copyText(id, iconPlace=null, icons='', delay=1000) {
+function copy(id, iconPlace=null, icons='', delay=1000) {
     let element = document.getElementById(id);
     let value = element.value;
     if (value === undefined) {
@@ -196,12 +194,16 @@ function copyText(id, iconPlace=null, icons='', delay=1000) {
     });
 }
 
-function expandTextarea(textarea, heightLimit=200) {
-    textarea.style.setProperty('height', '');
-    let padding = getComputedStyle(textarea).getPropertyValue('padding');
-    let value = Math.min(textarea.scrollHeight, heightLimit) - (parseInt(padding) * 2);
+function adjustHeight(elementOrId, limit=200) {
+    let element = baseJsGetElement(elementOrId);
+    element.style.setProperty('height', '');
+    let styles = getComputedStyle(element);
+    let paddingTop = styles.getPropertyValue('padding-top');
+    let paddingBottom = styles.getPropertyValue('padding-bottom');
+    let paddingY = parseInt(paddingTop) + parseInt(paddingBottom);
+    let value = Math.min(element.scrollHeight, limit) - paddingY;
     let height = `${value}px`;
-    textarea.style.setProperty('height', height);
+    element.style.setProperty('height', height);
 }
 
 function displayValue(element, id) {
@@ -209,5 +211,17 @@ function displayValue(element, id) {
 }
 
 function removeValue(id) {
-    document.getElementById(id).value = '';
+    let element = document.getElementById(id);
+    element.value = '';
+    if (element.tagName === 'TEXTAREA') {
+        element.style.removeProperty('height');
+    }
+}
+
+function toTop() {
+    window.scrollTo({top: 0});
+}
+
+function toTopSmooth() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
 }
